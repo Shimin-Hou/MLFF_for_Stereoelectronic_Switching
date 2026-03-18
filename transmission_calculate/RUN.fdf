@@ -1,0 +1,129 @@
+SystemName         110-146-gamma
+SystemLabel        110-146-gamma
+
+SaveTotalPotential true  
+SaveRho true
+SaveElectrostaticPotential   T
+
+%block ChemicalSpeciesLabel
+ 1    1   H
+ 2    6   C
+ 3    16  S    
+ 4    14  Si
+ 5    79  Aud
+ 6    79  Aus
+%endblock ChemicalSpeciesLabel
+
+
+%block Ps.lmax
+  H     3
+  C     3
+  S     3 
+  Si    3 
+  Aud   3
+  Aus   3
+%endblock Ps.lmax
+
+%block PAO.Basis
+H           1                    # Species label, number of l-shells 
+ n=1   0   2 P   1                   # n, l, Nzeta, Polarization, NzetaPol
+   3.760     2.716 
+   1.000     1.000  
+C           2                    # Species label, number of l-shells
+ n=2   0   2                         # n, l, Nzeta
+   5.500      3.200
+   1.000      1.000
+ n=2   1   2 P   1                   # n, l, Nzeta, Polarization, NzetaPol
+   4.500      3.500
+   1.000      1.000  
+S           2                    # Species label, number of l-shells
+ n=3   0   2                         # n, l, Nzeta
+   4.492      2.937
+   1.000      1.000
+ n=3   1   2 P   1                   # n, l, Nzeta, Polarization, NzetaPol
+   7.046      3.499
+   1.000      1.000
+Si                    3                    # Species label, number of l-shells
+ n=3   0   2                         # n, l, Nzeta
+   6.846      4.925
+   1.000      1.000
+ n=3   1   2                         # n, l, Nzeta, Polarization, NzetaPol
+   6.676      4.254
+   1.000      1.000
+ n=3   2   1                         # n, l, Nzeta, Polarization, NzetaPol
+   4.954
+   1.000
+Aud          3     0.025                  # Species label, number of l-shells
+ n=6   0   2    E  99.0 3.76
+   6.520    4.180
+   1.000    1.000
+ n=6   1   1    E  54.3 3.96
+   6.90
+   1.000
+ n=5   2   2    E  54.3 4.11                       # n, l, Nzeta
+   6.180    2.350
+   1.000    1.000
+Aus          3     0.025                  # Species label, number of l-shells
+ n=6   0   1    E  99.0 3.76
+   6.520
+   1.000
+ n=6   1   1    E  54.3 3.96
+   6.90
+   1.000
+ n=5   2   1    E  54.3 4.11                       # n, l, Nzeta
+   6.180
+   1.000
+%endblock PAO.Basis
+
+                                            
+MeshCutoff 250 Ry                                            
+ 
+# K-sampling (alternative specification using kgrid_cutoff)
+%block kgrid_Monkhorst_Pack
+  1   0   0    0.0
+  0   1   0    0.0
+  0   0   1    0.0
+%endblock kgrid_Monkhorst_Pack
+
+xc.functional           GGA           # Exchange-correlation functional                            
+xc.authors              PBE              # Exchange-correlation version 
+ 
+# Convergence of SCF 
+MaxSCFIterations        3000
+DM.MixingWeight         0.02
+DM.NumberPulay          10
+DM.Tolerance            1.0E-4
+ElectronicTemperature   300 K
+
+TS.ChargeCorrection.Factor 0.75
+TS.ChargeCorrection.Fermi.Tolerance 0.01
+ 
+# Type of solver
+SolutionMethod          Transiesta   
+ELSI.Solver             ELPA      
+MD.TypeOfRun            CG           # Type of dynamics:                                         
+MD.NumCGsteps           0         # Number of CG steps for
+MD.MaxCGDispl           0.08 bohr     # Maximum atomic displacement
+MD.UseSaveCG           true
+ 
+#DM.UseSaveDM          true          # to use continuation files
+#MD.UseSaveXV          true
+
+# Output options
+#LongOutput      T
+#WriteCoorStep   T
+###WriteMDXmol     T
+##WriteHirshfeldPop  true
+#SaveBaderCharge .true.
+   
+#Spin polarized     
+#FixSpin                F
+#%block DM.InitSpin
+#155 +
+#%endblock DM.InitSpin
+   
+%include ELEC.fdf
+%include STRUCT.fdf
+%include TBTRANS.fdf 
+
+

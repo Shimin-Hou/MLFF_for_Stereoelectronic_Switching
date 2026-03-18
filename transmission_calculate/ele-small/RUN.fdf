@@ -1,0 +1,108 @@
+SystemName          au
+SystemLabel         au
+
+SaveTotalPotential true  
+SaveRho true
+SaveElectrostaticPotential   T
+
+%block ChemicalSpeciesLabel
+ 1   79  Au   
+%endblock ChemicalSpeciesLabel
+
+LatticeConstant 1.0 Ang
+
+# Basis set definition
+#PAO.BasisSize   DZP
+#PAO.EnergyShift    50 meV
+
+%block Ps.lmax
+ Au    3
+%endblock Ps.lmax
+
+%block PAO.Basis
+Au     3     0.025                  # Species label, number of l-shells
+ n=6   0   1    E  99.0 3.76
+   6.520   
+   1.000   
+ n=6   1   1    E  54.3 3.96
+   6.90
+   1.000
+ n=5   2   1    E  54.3 4.11                       # n, l, Nzeta
+   6.180   
+   1.000  
+%endblock PAO.Basis
+
+# constrains in relaxation
+#%block GeometryConstraints
+#   position   from  1 to  100
+#   position   from  167 to  286
+#%endblock GeometryConstraints
+
+#Real space grid 
+MeshCutoff 250 Ry
+#%block GridCellSampling
+#  0.5  0.5   0.0
+#  0.5  0.0   0.5
+#  0.0  0.5   0.5
+#%endblock GridCellSampling
+
+
+# K-sampling (alternative specification using kgrid_cutoff)
+
+%block kgrid_Monkhorst_Pack
+     6   0   0  0.0
+     0   4   0  0.0
+     0   0   50  0.0
+%endblock kgrid_Monkhorst_Pack
+
+xc.functional         GGA           # Exchange-correlation functional                            
+xc.authors            PBE              # Exchange-correlation version 
+
+# Convergence of SCF 
+MaxSCFIterations 1000
+DM.MixingWeight 0.02
+DM.NumberPulay  10
+DM.Tolerance    1.0E-4
+ElectronicTemperature 300 K
+#MD.UseStructFile       .true.   #read initial file from previous run
+DM.UseSaveDM           .true.
+
+# Type of solver
+SolutionMethod         diagon
+MD.TypeOfRun           CG           # Type of dynamics:                                         
+MD.VariableCell       false
+#MD.RelaxCellOnly       T
+MD.NumCGsteps          0          # Number of CG steps for
+MD.MaxCGDispl          0.08 Ang     # Maximum atomic displacement
+MD.MaxForceTol         0.03 eV/Ang  # Tolerance in the maximum
+MD.MaxStressTol        0.2 Gpa
+MD.UseSaveXV        .true.
+
+# Output (Band structure calculation)
+#BandLinesScale    ReciprocalLatticeVectors
+#%block BandLines                                                                                
+#  1  0.00000   0.00000   0.00000  \Gamma                                                        
+# 18  0.50000   0.00000   0.25000  X                                                             
+# 10  0.50000   0.25000   0.50000  W                                                             
+#  6  0.37500   0.37500   0.75000  L                                                             
+# 14  0.00000   0.62500   0.25000  K                                                            
+# 20  0.00000   0.00000   0.00000  \Gamma                                                        
+#%endblock BandLines                                                                               
+
+LongOutput      T
+WriteForces   T
+WriteCoorStep   T
+SaveElectrostaticPotential   T             # Hartree Potential file
+SaveDeltaRho                 T
+WriteEigenvalues             T
+WriteMDhistory    T
+SaveHS          T
+SaveRHO         T
+WriteMullikenPop   1
+#%block ProjectedDensityOfStates
+#    -15.00   10.00  0.050  500  eV
+#%endblock ProjectedDensityOfStates
+
+#Spin polarized
+
+%include STRUCT.fdf

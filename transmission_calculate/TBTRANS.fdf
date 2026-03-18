@@ -1,0 +1,42 @@
+# fdf-flags for TBtrans
+
+#TBT.analyze             true
+#TBT.BTD.Pivot.Device    orb+none
+
+TBT.Directory ./T_33
+TBT.Elecs.Eta            0.0000136058 eV
+ 
+%block TBT.Contours
+  neq
+%endblock TBT.Contours
+
+%block TBT.Contour.neq
+  part line
+   from   -3.00000 eV to 3.00000 eV
+    delta    0.005 eV
+     method mid-rule
+%endblock TBT.Contour.neq
+
+#TBT.k [1 1 1]
+
+
+#For DOS
+#%block TBT.Atoms.Device
+#atom from 289 to 606
+#%endblock
+
+
+#===========    DOS   =============
+#TBT.DM.GF       true            # density matrix for the Green function maybe for LDOS
+#TBT.DM.A        true            # the electrode spectral functions
+#TBT.DOS.Gf      true
+#TBT.DOS.A.All   true
+#TBT.DOS.A true
+
+
+
+
+
+
+
+
