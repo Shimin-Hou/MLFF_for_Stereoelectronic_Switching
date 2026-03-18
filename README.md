@@ -1,6 +1,6 @@
 > ml potential (DeePMD-kit v3.0.0a0)
 > 
-This is the dataset used for potential training. The dataset for pure Au was obtained from Andolina et al. [1] and is not shown here. The file "input.json" is an input file for one round of the active learning iteration. Please refer to the SI for details of the training process. This file is intended only to illustrate the model structure.
+The file "input.json" is an input file for one round of the active learning iteration. Please refer to the SI for details of the training process. This file is intended only to illustrate the model structure.
 
 > molecular dynamics
 > 
