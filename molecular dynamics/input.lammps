@@ -1,0 +1,80 @@
+variable        NSTEPS                equal 320000
+variable        THERMO_FREQ           equal 1000
+variable        DUMP_FREQ             equal 1000
+variable        TEMP                  equal 300
+variable        PRES                  equal 1
+variable        TAU_T                 equal 0.100000
+variable        TAU_P                 equal 0.500000
+variable        RANDOM_SEED           equal 17841
+
+units           metal
+boundary        p p p
+atom_style      atomic
+
+neighbor        1.0 bin
+
+read_data       conf.lmp
+mass            1 1.000000
+mass            2 12.000000
+mass            3 32.000000
+mass            4 28.000000
+mass            5 196.967000
+
+region upper block INF INF INF INF 95 INF units box
+region low block INF INF INF INF INF 63 units box
+group upper region upper
+group low region low
+group boundary union upper low
+group mobile subtract all boundary
+
+pair_style      deepmd frozen_model.pth 
+pair_coeff      * *
+
+#------0.minimize-----
+#neigh_modify every 1 delay 0 check yes
+#fix      1 boundary setforce 0.0 0.0 0.0
+#velocity upper set 0 0 0 units box
+#velocity low set 0 0 0 units box
+#
+#min_style cg
+#minimize 1.0e-4 1.0e-4 1000 1000
+
+#------1.nvt relax------
+run_style       verlet #Velocity verlet  
+
+velocity mobile  create ${TEMP} ${RANDOM_SEED}
+fix 1 boundary setforce 0.0 0.0 0.0
+velocity upper set 0 0 0 units box
+velocity low set 0 0 0 units box
+
+fix 2 boundary nve/noforce
+fix 3 mobile nvt temp ${TEMP} ${TEMP} ${TAU_T}
+
+dump 1 all atom 1000 relax.atom
+thermo          1000
+timestep        0.001
+run 100000
+
+unfix 2
+unfix 3
+undump 1
+reset_timestep 0
+
+#------1.nvt stretch------
+run_style       verlet #Velocity verlet  
+
+velocity mobile  create ${TEMP} ${RANDOM_SEED}
+
+fix 1 boundary setforce 0.0 0.0 0.0
+fix 2 boundary nve/noforce
+fix 3 mobile nvt temp ${TEMP} ${TEMP} ${TAU_T}
+
+velocity upper set 0 0 0.02 units box
+velocity low set 0 0 -0.02 units box
+
+dump            dpgen_dump all custom ${DUMP_FREQ} dump.atom id type x y z
+thermo_style    custom step temp pe ke etotal press vol lx ly lz xy xz yz
+thermo		${THERMO_FREQ}
+
+timestep        0.001 #ps
+run             ${NSTEPS}
