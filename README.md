@@ -7,5 +7,5 @@ stretch-compress
 transmission_calculate (Transiesta)
 > The settings related to transmission calculations are provided here.
 
-transmission_fitting (Pytorch 2.0.0.post200, Python 3.10.13)
+transmission_fitting (Pytorch 2.0.0, Python 3.10.13)
 > This is an example of a processing script used for machine-learning-assisted fitting of transmission spectrum. Run "train.py" to perform the fitting, and execute "plt_fit.py" to output the final results with the suffix "_negf_fitting".
